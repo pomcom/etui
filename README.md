@@ -34,10 +34,11 @@ etui
 
 ### Controls
 
-- **Navigation**: Arrow keys (`←` `→` `↑` `↓`) or vim keys (`h` `j` `k` `l`)
+- **Navigation**: `←` `→` / `h` `l` to change quadrant, `↑` `↓` / `j` `k` to navigate tasks
+- **Complete Task**: `Space` or `Enter` - Mark task as completed/incomplete
 - **Add Task**: `a` - Add a new task to the selected quadrant
-- **Edit Task**: `e` - Edit the first task in the selected quadrant
-- **Delete Task**: `d` - Delete the first task in the selected quadrant
+- **Edit Task**: `e` - Edit the selected task
+- **Delete Task**: `d` - Delete the selected task
 - **Toggle Context**: `t` - Switch between work and private contexts
 - **Quit**: `q` or `Ctrl+C`
 
@@ -63,6 +64,7 @@ Data is stored in JSONL (JSON Lines) format. Each line contains a JSON object re
   "description": "Task Description",
   "quadrant": 0,
   "context": "work",
+  "completed": false,
   "created_at": "2023-01-01T12:00:00Z",
   "updated_at": "2023-01-01T12:00:00Z"
 }

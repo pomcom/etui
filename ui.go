@@ -65,7 +65,7 @@ func (m model) viewMatrix() string {
 		s.WriteString("\n\n" + lipgloss.NewStyle().Foreground(lipgloss.Color("#04B575")).Render(m.message))
 	}
 
-	help := "\n\nControls: ← → / hl: change quadrant | ↑ ↓ / jk: navigate tasks | Space/Enter: complete | a: add | e: edit | d: delete | t: toggle context | q: quit"
+	help := "\n\nControls: ← → / hl: change quadrant | ↑ ↓ / jk: navigate tasks | Space/Enter: complete | a: add | e: edit | d: delete | t: toggle context | ?: toggle tips | q: quit"
 	s.WriteString(lipgloss.NewStyle().Foreground(lipgloss.Color("#626262")).Render(help))
 
 	return s.String()
@@ -78,13 +78,26 @@ func (m model) renderQuadrant(quad Quadrant, width, height int) string {
 	var borderStyle lipgloss.Border
 	var activeColor, inactiveColor string
 
+	// Priority-based warm colors
+	var priorityColor string
+	switch quad {
+	case UrgentImportant:
+		priorityColor = "#E07A3F" // Warm coral/amber
+	case NotUrgentImportant:
+		priorityColor = "#2A7F7C" // Deep teal
+	case UrgentNotImportant:
+		priorityColor = "#D4A574" // Warm gold
+	case NotUrgentNotImportant:
+		priorityColor = "#8B8680" // Soft gray
+	}
+
 	if m.taskManager.GetCurrentContext() == ContextWork {
 		borderStyle = lipgloss.RoundedBorder()
-		activeColor = "#7D56F4"   // Purple for work
+		activeColor = priorityColor
 		inactiveColor = "#3C3C3C"
 	} else {
 		borderStyle = lipgloss.DoubleBorder()
-		activeColor = "#04B575"   // Green for private
+		activeColor = priorityColor
 		inactiveColor = "#2C4A3D"
 	}
 
@@ -105,9 +118,20 @@ func (m model) renderQuadrant(quad Quadrant, width, height int) string {
 	}
 
 	var content strings.Builder
-	content.WriteString(lipgloss.NewStyle().Bold(true).Render(quad.String()) + "\n")
+	header := quad.String()
+	if m.showTips {
+		tip := getQuadrantTip(quad)
+		tipStyle := lipgloss.NewStyle().
+			Foreground(lipgloss.Color(priorityColor)).
+			Italic(true)
+		header = quad.String() + "\n" + tipStyle.Render(tip)
+	}
+	content.WriteString(lipgloss.NewStyle().Bold(true).Render(header) + "\n")
 
 	maxTasks := height - 3
+	if m.showTips {
+		maxTasks = height - 4 // Account for extra tip line
+	}
 	for i, task := range tasks {
 		if i >= maxTasks {
 			content.WriteString("...")

@@ -23,6 +23,21 @@ func clearMessageAfter(duration time.Duration) tea.Cmd {
 	})
 }
 
+func getQuadrantTip(quad Quadrant) string {
+	switch quad {
+	case UrgentImportant:
+		return "DO FIRST"
+	case NotUrgentImportant:
+		return "SCHEDULE"
+	case UrgentNotImportant:
+		return "DELEGATE"
+	case NotUrgentNotImportant:
+		return "DON'T DO"
+	default:
+		return ""
+	}
+}
+
 type model struct {
 	taskManager       *TaskManager
 	mode              mode
@@ -34,6 +49,7 @@ type model struct {
 	width             int
 	height            int
 	message           string
+	showTips          bool
 
 	tempTitle       string
 	tempDescription string
@@ -92,8 +108,16 @@ func (m model) updateMatrix(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "t":
 		m.taskManager.ToggleContext()
 		m.selectedTaskIndex = 0
-		m.message = "Switched to " + string(m.taskManager.GetCurrentContext()) + " context"
-		return m, clearMessageAfter(2*time.Second)
+		m.message = ""
+		
+	case "?", "f1":
+		m.showTips = !m.showTips
+		if m.showTips {
+			m.message = "Tips enabled"
+		} else {
+			m.message = "Tips disabled"
+		}
+		return m, clearMessageAfter(1*time.Second)
 
 	case "h", "left":
 		if m.selectedQuad == UrgentImportant {
