@@ -44,10 +44,10 @@ etui
 
 ### Eisenhower Matrix Quadrants
 
-1. **Urgent & Important** (Do First): Crisis situations, deadlines
+1. **Urgent & Important** (Do First): Deadlines
 2. **Not Urgent & Important** (Schedule): Planning, prevention, development
-3. **Urgent & Not Important** (Delegate): Interruptions, some meetings
-4. **Not Urgent & Not Important** (Don't Do): Time wasters, excessive social media
+3. **Urgent & Not Important** (Delegate): Interruptions
+4. **Not Urgent & Not Important** (Don't Do): Time wasters
 
 ## Data Storage
 
