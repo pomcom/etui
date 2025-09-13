@@ -9,6 +9,7 @@ import (
 
 const (
 	dataFile = "tasks.jsonl"
+	appName = "etui"
 )
 
 func getDataFilePath() (string, error) {
@@ -16,7 +17,7 @@ func getDataFilePath() (string, error) {
 	
 	// Follow XDG Base Directory specification
 	if xdgDataHome := os.Getenv("XDG_DATA_HOME"); xdgDataHome != "" {
-		dataDir = filepath.Join(xdgDataHome, "eisenhower-tui")
+		dataDir = filepath.Join(xdgDataHome, appName)
 	} else {
 		home, err := os.UserHomeDir()
 		if err != nil {
